@@ -1,0 +1,164 @@
+<script language="Javascript">
+	function go() {       
+		$('i1').src = $('u1').value;
+		$('i2').src = $('u2').value;
+		swap2();    
+		makeLink();
+		//$('images').innerHTML = "<img id='i' src='" + $('u1').value + "' onmouseover='swap1()' onmouseout='swap2()'>";
+	}
+	function swap1() {
+		$('i1').style.display="none";               
+		$('i2').style.display="block";               
+		           
+		//$('i').src=$('u2').value;
+	}
+	function swap2() {           
+		$('i1').style.display="block";               
+		$('i2').style.display="none";               
+		//$('i').src=$('u1').value;
+	}              
+	
+	function makeLink() {
+		if ($('u1').value != "" || $('u2').value != "") {
+			url = "http://oranchak.com/swapper/?u1=" + escape($('u1').value) + "&u2=" + escape($('u2').value);
+			$('link').innerHTML = "Direct link: <a href=\"" + url + "\">" + url + "</a>";
+		}
+	}
+	                     
+	loading1=false;
+	loading2=false;
+	function preload() {    
+		go();
+//		loading1=true;
+ //   	loading2=true;
+//		$('msg1').innerHTML = "preloading image 1...";
+//		$('msg2').innerHTML = "preloading image 2...";
+//		$('preload').innerHTML = "<img src='" + $('u1').value + "' onload='done1()'><img src='" + $('u2').value + "' onload='done2()'>";
+	}                 
+	
+	function done1() {
+		$('msg1').innerHTML = "";
+	}         
+	
+	function done2() {
+		$('msg2').innerHTML = "";
+	}         
+	
+	function init() {         
+		if (window.location.search) {
+			q=window.location.search.toQueryParams();
+			if (q["u1"]) $("u1").value=q["u1"];
+			if (q["u2"]) $("u2").value=q["u2"];
+			go();
+		}
+				
+	}
+	
+	function c() {
+		$("u1").value = "";
+		$("u2").value = "";
+		$("images").innerHTML = "";
+		$('msg1').innerHTML = "";
+		$('msg2').innerHTML = "";    
+		$('link').innerHTML = "";
+	}
+	
+	function move(direction) {
+		which = $('which').options[$('which').selectedIndex].value;
+		if (which == "1") {
+		    img = $('i1');       
+		}
+		else {      
+		    img = $('i2');       
+		}                             
+		
+
+		
+		img.style.position = "relative";
+		inc=parseInt($('offset').value);
+		offLeft=(img.style.left ? parseInt(img.style.left.replace("px","")) : 0);
+		offTop=(img.style.top ? parseInt(img.style.top.replace("px","")): 0);
+		if (direction==0) { // up
+			img.style.top = (offTop-inc);
+		}
+	    else if (direction==1) { // down
+			img.style.top = (offTop+inc);
+		}
+		else if (direction==2) { // left
+			img.style.left = (offLeft-inc);
+		}
+	    else if (direction==3) { // right
+			img.style.left = (offLeft+inc);
+		}
+		
+	}
+	
+	function sw() {
+		which = $('which').options[$('which').selectedIndex].value;
+		if (which == "1") {
+			swap2();
+		}
+		else {      
+			swap1();
+		}
+	}
+	
+</script>
+
+<script src="prototype.js" type="text/javascript"></script>
+<script src="scriptaculous.js" type="text/javascript"></script>
+
+
+<style>
+* { font-family: sans-serif; font-size: 10pt;}
+html, body { width: 95%; height: 95%;}
+table { width: 100%; height: 100%; margin-top: 1em; border-collapse: true;}
+input { background-color: #eee; border:thin solid #99f; padding: 5px 5px 5px 5px ;}
+.b { border: thin solid #ccc;}
+.b:hover { background-color: #ddd;}
+td {
+	width: 10%;
+	height: 10%;
+	margin: 0;
+	padding: 0;
+}
+</style>
+<body onload="init()">                  
+	<center>
+	<form>
+Image 1 URL: <input onblur="preload()" size="80" type="text" name="u1" id="u1"><br>
+Image 2 URL: <input onblur="preload()" size="80" type="text" name="u2" id="u2"><br>
+Or, try a few of these examples: <a href="?u1=http%3A//farm4.static.flickr.com/3043/2551732899_a5ed4b6800.jpg&u2=http%3A//farm4.static.flickr.com/3073/2934062119_88e2dd835b.jpg">Tinker Cliffs</a> | 
+<a href="?u1=http%3A//farm4.static.flickr.com/3547/3393463983_08d98cd594.jpg&u2=http%3A//farm3.static.flickr.com/2344/1911911543_4aaf8ace88.jpg">Wye Oak</a> |
+<a href="?u1=http%3A//farm4.static.flickr.com/3321/3301488947_ce210eb21e_o.jpg&u2=http%3A//farm4.static.flickr.com/3434/3302321222_fb0a85a5ae_o.jpg">Tree Silo</a> |
+<a href="?u1=http%3A//www.hemmy.net/images/arts/beforeafterphotoshop04.jpg&u2=http%3A//www.hemmy.net/images/arts/beforeafterphotoshop03.jpg">Power of Photoshop</a> |
+<a href="?u1=http%3A//oranchak.com/swapper/bush-before.jpg&u2=http%3A//oranchak.com/swapper/bush-after.jpg">Bush before and after office</a> 
+
+<p>    
+	
+Move <select id="which" onchange="sw()"><option value="1">Photo 1</option><option value="2">Photo 2</option></select> by <input type="text" size="3" value="5" name="offset" id="offset"> pixels with the following links:<br>
+<a href="javascript:move(0)">Up</a> | <a href="javascript:move(1)">Down</a> | <a href="javascript:move(2)">Left</a> | <a href="javascript:move(3)">Right</a> 
+</p>
+
+
+
+<br>
+<input type="button" class="b" onclick="go(); return false;" value="Swappify">
+<input type="button" class="b" onclick="c();" value="Clear">
+          </form>
+<div id="images">
+	<img id="i1" style="display:none" onmouseover='swap1()' onmouseout='swap2()'>
+	<img id="i2" style="display:none" onmouseover='swap1()' onmouseout='swap2()'>
+</div>           
+
+<div id="preload" style="display:none">
+</div>
+<div id="msg1">
+</div>
+<div id="msg2">
+</div>
+	   
+<p><i>When the images are loaded, put your mouse cursor on and off the image to flip between them.</i></p>
+<p id="link"></p>
+</center>
+</body>
